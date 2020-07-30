@@ -10,7 +10,8 @@
  * - IMAP_PASSWORD
  * - IMAP_PORT (supposed to be 143)
  */
-extern crate imap;
+/// PATCH_FOR_ASYNC_IMAP_LITE [edit]
+extern crate imap_patch_for_async_imap_lite as imap;
 extern crate native_tls;
 
 use native_tls::TlsConnector;

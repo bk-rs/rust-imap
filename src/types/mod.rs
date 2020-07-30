@@ -315,7 +315,8 @@ impl<D> ZeroCopy<D> {
 }
 
 use super::error::Error;
-pub(crate) type ZeroCopyResult<T> = Result<ZeroCopy<T>, Error>;
+/// PATCH_FOR_ASYNC_IMAP_LITE [pub]
+pub type ZeroCopyResult<T> = Result<ZeroCopy<T>, Error>;
 
 use std::ops::Deref;
 impl<D> Deref for ZeroCopy<D> {

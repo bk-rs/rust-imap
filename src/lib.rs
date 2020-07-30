@@ -76,7 +76,8 @@
 #![deny(missing_docs)]
 #![warn(rust_2018_idioms)]
 
-mod parse;
+/// PATCH_FOR_ASYNC_IMAP_LITE [pub]
+pub mod parse;
 
 pub mod types;
 

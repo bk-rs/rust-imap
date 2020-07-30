@@ -27,7 +27,8 @@ macro_rules! quote {
     };
 }
 
-fn validate_str(value: &str) -> Result<String> {
+/// PATCH_FOR_ASYNC_IMAP_LITE [pub]
+pub fn validate_str(value: &str) -> Result<String> {
     let quoted = quote!(value);
     if quoted.find('\n').is_some() {
         return Err(Error::Validate(ValidateError('\n')));
@@ -81,6 +82,24 @@ pub struct Connection<T: Read + Write> {
 
     /// Tracks if we have read a greeting.
     pub greeting_read: bool,
+}
+
+/// PATCH_FOR_ASYNC_IMAP_LITE [add]
+impl<T: Read + Write> Connection<T> {
+    /// PATCH_FOR_ASYNC_IMAP_LITE [add]
+    pub fn new(stream: T, debug: bool, greeting_read: bool) -> Self {
+        Self {
+            stream: BufStream::new(stream),
+            tag: INITIAL_TAG,
+            debug,
+            greeting_read,
+        }
+    }
+
+    /// PATCH_FOR_ASYNC_IMAP_LITE [add]
+    pub fn get_mut(&mut self) -> &mut BufStream<T> {
+        &mut self.stream
+    }
 }
 
 // `Deref` instances are so we can make use of the same underlying primitives in `Client` and
@@ -1196,7 +1215,8 @@ impl<T: Read + Write> Connection<T> {
         self.run_command_and_read_response(command).map(|_| ())
     }
 
-    fn run_command(&mut self, untagged_command: &str) -> Result<()> {
+    /// PATCH_FOR_ASYNC_IMAP_LITE [pub]
+    pub fn run_command(&mut self, untagged_command: &str) -> Result<()> {
         let command = self.create_command(untagged_command);
         self.write_line(command.into_bytes().as_slice())
     }
@@ -1212,7 +1232,8 @@ impl<T: Read + Write> Connection<T> {
         Ok(v)
     }
 
-    pub(crate) fn read_response_onto(&mut self, data: &mut Vec<u8>) -> Result<()> {
+    /// PATCH_FOR_ASYNC_IMAP_LITE [pub]
+    pub fn read_response_onto(&mut self, data: &mut Vec<u8>) -> Result<()> {
         let mut continue_from = None;
         let mut try_first = !data.is_empty();
         let match_tag = format!("{}{}", TAG_PREFIX, self.tag);
@@ -1284,7 +1305,8 @@ impl<T: Read + Write> Connection<T> {
         }
     }
 
-    pub(crate) fn readline(&mut self, into: &mut Vec<u8>) -> Result<usize> {
+    /// PATCH_FOR_ASYNC_IMAP_LITE [pub]
+    pub fn readline(&mut self, into: &mut Vec<u8>) -> Result<usize> {
         use std::io::BufRead;
         let read = self.stream.read_until(LF, into)?;
         if read == 0 {

@@ -1,3 +1,5 @@
+#![allow(missing_docs)]
+/// PATCH_FOR_ASYNC_IMAP_LITE [add]
 use imap_proto::{self, MailboxDatum, Response};
 use lazy_static::lazy_static;
 use regex::Regex;

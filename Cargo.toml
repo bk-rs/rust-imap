@@ -1,5 +1,5 @@
 [package]
-name = "imap"
+name = "imap-patch-for-async-imap-lite"
 version = "2.2.0"
 authors = ["Matt McCoy <mattnenterprise@yahoo.com>",
            "Jon Gjengset <jon@thesquareplanet.com>"]
